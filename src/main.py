@@ -2,6 +2,7 @@ import reportlab.pdfgen.canvas
 import pandas as pd
 
 import os
+import re
 
 
 path_to_data_dir = "fake_test_data/"  # make sure to end the path with a "/"
@@ -150,22 +151,23 @@ def process_interview_responses(alter_data):  # input: pandas DF
     for i in range(len(alter_data.index)):
         # attribute_list.append({"name": "NAME"})
         attribute_list.append(get_attributes(alter_data, i))
-        print(f'attribute list: {attribute_list}')
+        # print(f'attribute list: {attribute_list}')
     return attribute_list
     # return [{'alter name': 'NAME', 'alter gender': 'GENDER', 'alter relationship': 'REL'}, {'alter name': 'NAME', 'alter gender': 'GENDER', 'alter relationship': 'REL'}]
 
 
-# TODO gather ego uuid
-
-def create_report_for_interview(path):
+def create_report_for_interview(path, report_number):
     """ creates and saves a PDF of alter data for a single ego """
     alter_data = pd.read_csv(path)
     attributes_list: list = process_interview_responses(alter_data)
     BLOCK_LINE_LENGTH = len([*attributes_list[0].keys()])  # number of attributes per alter. This allows us to space alter data blocks
     num_alters = len(attributes_list)
     # print(f'n alters: {num_alters}')
-    ego_UUID = "example_ego_UUID"   # TODO regex this
-    canvas = reportlab.pdfgen.canvas.Canvas(f'{ego_UUID}.pdf')
+    # grab the ego UUID
+    separated_path = re.split(",|_", path)
+    separated_path = [a for a in separated_path if len(a) > 32]  # grab the ego UUID (will not work with folder names over 32 characters in length)
+    ego_UUID = f'{separated_path}'  # I've left this in this format in case the file path exceeds 32 characters- at least it will still contain the UUID in that case
+    canvas = reportlab.pdfgen.canvas.Canvas(f'{ego_UUID}_report.pdf')  # UUID at the beginning for easy searches
     attribute_name_list = [*attributes_list[0].keys()]
     # print(f'attr names: {attribute_name_list}')
     attribute_values_list = [[*attributes.values()] for attributes in attributes_list]
@@ -176,5 +178,5 @@ def create_report_for_interview(path):
     canvas.showPage()
     canvas.save()
 
-
-create_report_for_interview(path_to_data_dir + relevant_files[0])
+for i in range(len(relevant_files)):
+    create_report_for_interview(path_to_data_dir + relevant_files[i], i)
