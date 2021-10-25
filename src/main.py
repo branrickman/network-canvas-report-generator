@@ -4,10 +4,10 @@ import pandas as pd
 import re
 import os
 
-path_to_data_dir = "fake_test_data/"
+path_to_data_dir = "data/"
 if path_to_data_dir[len(path_to_data_dir)-1] != '/':  # add a backslash to path name if omitted
     path_to_data_dir = path_to_data_dir + '/'
-    print(path_to_data_dir)
+    # print(path_to_data_dir)
 
 # define alter attributes and attribute block line length
 name = "NAME"
@@ -157,7 +157,7 @@ def get_attributes(alters_dataframe, entry):
     attributes = {'name': name, 'gender': gender, 'relationship': relationship, "space": "space"}
                   # 'communication_frequency': communication_frequency,
                   # 'discussed_su_in_last_90_days': discussed_su_in_last_90_days}
-    print(attributes)
+    #print(attributes)
 
     return attributes
 
@@ -179,12 +179,12 @@ def create_report_for_interview(path):
 
     # grab the ego UUID
     separated_path = re.split(",|_|/", path)
-    # print(f'sep. path: {separated_path}')
+    #print(f'sep. path: {separated_path}')
     # separated_path = [a for a in separated_path if len(a) > 32]  # grab the ego UUID (will not work with folder names over 32 characters in length)
     ego_UUID = f'{separated_path[len(separated_path) - 1 - 2]}'  # any NC export will place the ego UUID in the 3rd from the end when split as above
     ego_case_ID = f'{separated_path[len(separated_path) - 1 - 3]}'
     ego_combined_ID = [ego_case_ID, ego_UUID]
-
+    #print(f'{ego_combined_ID}')
     attribute_name_list = [*attributes_list[0].keys()]
     attribute_values_list = [[*attributes.values()] for attributes in attributes_list]
 
@@ -196,11 +196,7 @@ def create_report_for_interview(path):
     canvas.save()
 
 
-def main():
-    relevant_files = get_relevant_files(path_to_data_dir)
-    for i in range(len(relevant_files)):
-        create_report_for_interview(path_to_data_dir + relevant_files[i])
-
-
-if __name__ == "__main__":
-    main()
+relevant_files = get_relevant_files(path_to_data_dir)
+#print(relevant_files)
+for i in range(len(relevant_files)):
+    create_report_for_interview(path_to_data_dir + relevant_files[i])
