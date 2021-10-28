@@ -10,11 +10,11 @@ if path_to_data_dir[len(path_to_data_dir) - 1] != '/':  # add a backslash to pat
     # print(path_to_data_dir)
 
 # define alter attributes and attribute block line length
-name = "NAME"
-gender = "GENDER"
-relationship = "RELATIONSHIP"
-count_on = "COUNTON"
-discuss_SU = "DISCUSSES SUBSTANCE USE"
+name = "NAME initial"
+gender = "GENDER initial"
+relationship = "RELATIONSHIP initial"
+count_on = "COUNTON initial"
+discuss_SU = "DISCUSSES SUBSTANCE USE initial"
 
 attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'count on': count_on,
               'discusses SU with': discuss_SU, "": ""}  # note: the "": "" entry is used for a line break later
