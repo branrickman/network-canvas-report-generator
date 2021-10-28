@@ -182,6 +182,11 @@ def create_report_for_interview(path):
     canvas = reportlab.pdfgen.canvas.Canvas(
         f'{ego_case_ID + "_" + ego_UUID}_report.pdf')  # UUID at the beginning for easy searches
     draw_ego_id(canvas, ego_combined_ID)
+
+    if num_alters > 10:
+        raise ValueError(
+            f'\nERROR: participant (case ID) {ego_case_ID} lists more than 10 alters- the software cannot handle this. Please email Bryan Brickman for support.')
+
     draw_all_alters(canvas, num_alters, attribute_name_list, attribute_values_list, BLOCK_LINE_LENGTH)
     canvas.showPage()
     canvas.save()
