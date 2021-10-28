@@ -82,11 +82,11 @@ def get_attributes(alters_dataframe, entry):
     data = alters_dataframe[entry:entry + 1]
 
     # define attributes needed for report (fallback values to detect data grabbing errors)
-    name = "NAME EMPTY"
-    gender = "GENDER EMPTY"
-    relationship = "RELATIONSHIP EMPTY"
-    count_on = "COUNTON EMPTY"
-    discuss_SU = "DISCUSSES SUBSTANCE USE EMPTY"
+    name = ["EMPTY"]
+    gender = ["EMPTY"]
+    relationship = ["EMPTY"]
+    count_on = ["EMPTY"]
+    discuss_SU = ["EMPTY"]
 
     # collect attributes (this is a bit annoying, at least the way I do it)
     name = list(data['name'].values)
@@ -108,29 +108,32 @@ def get_attributes(alters_dataframe, entry):
         gender = "refused"
 
     if data['relationship_type_partner'].values[0]:
-        relationship = "partner"
+        relationship.append("partner")
     if data['relationship_type_parent'].values[0]:
-        relationship = "parent"
+        relationship.append("parent")
     if data['relationship_type_child'].values[0]:
-        relationship = "child"
+        relationship.append("child")
     if data['relationship_type_otherFam'].values[0]:
-        relationship = "other family"
+        relationship.append("other family")
     if data['relationship_type_roommate'].values[0]:
-        relationship = "roommate"
+        relationship.append("roommate")
     if data['relationship_type_friend'].values[0]:
-        relationship = "friend"
+        relationship.append("friend")
     if data['relationship_type_usedWith'].values[0]:
-        relationship = "used with"
+        relationship.append("used with")
     if data['relationship_type_boughtFrom'].values[0]:
-        relationship = "bought from"
+        relationship.append("bought from")
     if data['relationship_type_sponsor'].values[0]:
-        relationship = "sponsor"
+        relationship.append("sponsor")
     if data['relationship_type_healthCare'].values[0]:
-        relationship = "healthcare worker"
+        relationship.append("healthcare worker")
     if data['relationship_type_substanceProfessional'].values[0]:
-        relationship = "substance professional"
+        relationship.append("substance professional")
     if data['relationship_type_o'].values[0]:
-        relationship = "other"
+        relationship.append("other")
+
+    if relationship != ["EMPTY"]:
+        relationship = ", ".join(relationship[1:])  # cull the leading "EMPTY" value
 
     if data['count_on'].values[0]:
         count_on = 'true'
