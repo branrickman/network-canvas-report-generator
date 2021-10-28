@@ -87,13 +87,13 @@ def get_attributes(alters_dataframe, entry):
     data = alters_dataframe[entry:entry+1]
 
     # define attributes needed for report
-    name = "NAME"
-    gender = "GENDER"
-    relationship = "RELATIONSHIP"
-    count_on = "COUNTON"
-    discuss_SU = "DISCUSSES SUBSTANCE USE"
-    communication_frequency = "COMMUNICATION_FREQUENCY"
-    discussed_su_in_last_90_days = "DISCUSSED SU IN LAST 30 DAYS"
+    name = "NAME EMPTY"
+    gender = "GENDER EMPTY"
+    relationship = "RELATIONSHIP EMPTY"
+    count_on = "COUNTON EMPTY"
+    discuss_SU = "DISCUSSES SUBSTANCE USE EMPTY"
+    communication_frequency = "COMMUNICATION_FREQUENCY EMPTY"
+    discussed_su_in_last_90_days = "DISCUSSED SU IN LAST 30 DAYS EMPTY"
 
 
     # collect attributes (this is a bit annoying, at least the way I do it)
@@ -101,44 +101,44 @@ def get_attributes(alters_dataframe, entry):
     name = name[0]  # this strips the brackets from the alter names
 
     if data['gender_m'].values[0]:
-        gender = "gender_m"
+        gender = "male"
     if data['gender_f'].values[0]:
-        gender = "gender_f"
+        gender = "female"
     if data['gender_transf'].values[0]:
-        gender = "gender_transf"
+        gender = "trans woman (MTF)"
     if data['gender_transm'].values[0]:
-        gender = "gender_transm"
+        gender = "trans man (FTM)"
     if data['gender_gnc'].values[0]:
-        gender = "gender_gnc"
+        gender = "gender non-conforming"
     if data['gender_dk'].values[0]:
-        gender = "gender_dk"
+        gender = "don't know"
     if data['gender_refuse'].values[0]:
-        gender = "gender_refuse"
+        gender = "refused"
 
     if data['relationship_type_partner'].values[0]:
-        relationship = "relationship_type_partner"
+        relationship = "partner"
     if data['relationship_type_parent'].values[0]:
-        relationship = "relationship_type_parent"
+        relationship = "parent"
     if data['relationship_type_child'].values[0]:
-        relationship = "relationship_type_child"
+        relationship = "child"
     if data['relationship_type_otherFam'].values[0]:
-        relationship = "relationship_type_otherFam"
+        relationship = "other family"
     if data['relationship_type_roommate'].values[0]:
-        relationship = "relationship_type_roommate"
+        relationship = "roommate"
     if data['relationship_type_friend'].values[0]:
-        relationship = "relationship_type_friend"
+        relationship = "friend"
     if data['relationship_type_usedWith'].values[0]:
-        relationship = "relationship_type_usedWith"
+        relationship = "used with"
     if data['relationship_type_boughtFrom'].values[0]:
-        relationship = "relationship_type_boughtFrom"
+        relationship = "bought from"
     if data['relationship_type_sponsor'].values[0]:
-        relationship = "relationship_type_sponsor"
+        relationship = "sponsor"
     if data['relationship_type_healthCare'].values[0]:
-        relationship = "relationship_type_healthCare"
+        relationship = "healthcare worker"
     if data['relationship_type_substanceProfessional'].values[0]:
-        relationship = "relationship_type_substanceProfessional"
+        relationship = "substance professional"
     if data['relationship_type_o'].values[0]:
-        relationship = "relationship_type_o"
+        relationship = "other"
 
     # communication_frequency = data['communication_frequency'].values[0]
     # if communication_frequency == 0:
@@ -156,6 +156,16 @@ def get_attributes(alters_dataframe, entry):
 
     # if data['discuss_substance'].values[0]:
     #     discussed_su_in_last_90_days = True
+
+    if data['count_on'].values[0]:
+        count_on = 'true'
+    else:
+        count_on = 'false'
+
+    if data['discuss_substance'].values[0]:
+        discuss_SU = 'true'
+    else:
+        discuss_SU = 'false'
 
     attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'counts on': count_on, 'discusses SU with': discuss_SU, "": ""}  # note: "": "" entry used for line break
                   # 'communication_frequency': communication_frequency,
