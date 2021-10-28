@@ -4,6 +4,7 @@ import pandas as pd
 import re
 import os
 
+
 path_to_data_dir = "data/"
 if path_to_data_dir[len(path_to_data_dir) - 1] != '/':  # add a backslash to path name if omitted
     path_to_data_dir = path_to_data_dir + '/'
@@ -178,9 +179,12 @@ def create_report_for_interview(path):
     attribute_name_list = [*attributes_list[0].keys()]
     attribute_values_list = [[*attributes.values()] for attributes in attributes_list]
 
-    # create the reportlab canvas, draw to it, and save as pdf
+    # check for file existence, create the reportlab canvas, draw to it, and save as pdf
+    version = 0
+    while os.path.exists(f'{ego_case_ID + "_" + ego_UUID}_report_{version}.pdf'):
+        version += 1
     canvas = reportlab.pdfgen.canvas.Canvas(
-        f'{ego_case_ID + "_" + ego_UUID}_report.pdf')  # UUID at the beginning for easy searches
+        f'{ego_case_ID + "_" + ego_UUID}_report_{version}.pdf')  # UUID at the beginning for easy searches
     draw_ego_id(canvas, ego_combined_ID)
 
     if num_alters > 10:
