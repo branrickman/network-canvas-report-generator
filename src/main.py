@@ -5,7 +5,7 @@ import re
 import os
 
 path_to_data_dir = "data/"
-if path_to_data_dir[len(path_to_data_dir)-1] != '/':  # add a backslash to path name if omitted
+if path_to_data_dir[len(path_to_data_dir) - 1] != '/':  # add a backslash to path name if omitted
     path_to_data_dir = path_to_data_dir + '/'
     # print(path_to_data_dir)
 
@@ -15,13 +15,9 @@ gender = "GENDER"
 relationship = "RELATIONSHIP"
 count_on = "COUNTON"
 discuss_SU = "DISCUSSES SUBSTANCE USE"
-# communication_frequency = "COMMUNICATION_FREQUENCY"
-# discussed_su_in_last_30_days = "DISCUSSED SU IN LAST 30 DAYS"
 
-attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'count on': count_on, 'discusses SU with': discuss_SU, "": ""}  # note: the "": "" entry is used for a line break later
-
-              # 'communication_frequency': communication_frequency,
-              # 'discussed_su_in_last_30_days': discussed_su_in_last_30_days}
+attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'count on': count_on,
+              'discusses SU with': discuss_SU, "": ""}  # note: the "": "" entry is used for a line break later
 
 BLOCK_LINE_LENGTH = len(attributes)  # the length (in lines) of the alter attributes block
 left_margin = 25
@@ -46,20 +42,20 @@ def draw_ego_id(canvas, ego_id):
     canvas.drawString(left_margin, page_begin_y - top_margin - 20, f'')
 
 
-
 def draw_line(canvas, tab_level, category, string, index, kind):
     """ draws a line of text to the canvas at a specified tab level, with vertical offset """
     # a bunch of hardcoded, undocumented offsets hacked together
     if kind == "attribute":
-        canvas.drawString(left_margin + (12 * (tab_level + 1)), page_begin_y - top_margin - 15 - 20 -(12 * index), f'{category}: {string}')
+        canvas.drawString(left_margin + (12 * (tab_level + 1)), page_begin_y - top_margin - 15 - 20 - (12 * index),
+                          f'{category}: {string}')
 
     if kind == "space":
-        canvas.drawString(left_margin + (12 * (tab_level + 1)), page_begin_y - top_margin - 15 - 20 -(12 * index), f'')
+        canvas.drawString(left_margin + (12 * (tab_level + 1)), page_begin_y - top_margin - 15 - 20 - (12 * index), f'')
+
 
 def draw_alter(canvas, category_list, value_list, number, block_line_length):
     """ draws formatted lines of data for a single alter """
     # alter name
-    # draw_line(canvas, 1, "", "", number * block_line_length)
     draw_line(canvas, 0, category_list[0], value_list[0], number * block_line_length, kind="attribute")
 
     # alter attributes
@@ -83,18 +79,14 @@ def strip_brackets(name):
 def get_attributes(alters_dataframe, entry):
     """ Gathers the attributes of each alter. Define the desired attributes by modifying "attributes" at the end of
     the function """
-    # print(alters_dataframe[entry:entry+1])
-    data = alters_dataframe[entry:entry+1]
+    data = alters_dataframe[entry:entry + 1]
 
-    # define attributes needed for report
+    # define attributes needed for report (fallback values to detect data grabbing errors)
     name = "NAME EMPTY"
     gender = "GENDER EMPTY"
     relationship = "RELATIONSHIP EMPTY"
     count_on = "COUNTON EMPTY"
     discuss_SU = "DISCUSSES SUBSTANCE USE EMPTY"
-    communication_frequency = "COMMUNICATION_FREQUENCY EMPTY"
-    discussed_su_in_last_90_days = "DISCUSSED SU IN LAST 30 DAYS EMPTY"
-
 
     # collect attributes (this is a bit annoying, at least the way I do it)
     name = list(data['name'].values)
@@ -140,23 +132,6 @@ def get_attributes(alters_dataframe, entry):
     if data['relationship_type_o'].values[0]:
         relationship = "other"
 
-    # communication_frequency = data['communication_frequency'].values[0]
-    # if communication_frequency == 0:
-    #     communication_frequency = "refused"
-    # if communication_frequency == 1:
-    #     communication_frequency = "daily"
-    # if communication_frequency == 2:
-    #     communication_frequency = "weekly"
-    # if communication_frequency == 3:
-    #     communication_frequency = "monthly"
-    # if communication_frequency == 4:
-    #     communication_frequency = "less than monthly"
-    # if communication_frequency == 5:
-    #     communication_frequency = "never"
-
-    # if data['discuss_substance'].values[0]:
-    #     discussed_su_in_last_90_days = True
-
     if data['count_on'].values[0]:
         count_on = 'true'
     else:
@@ -167,10 +142,8 @@ def get_attributes(alters_dataframe, entry):
     else:
         discuss_SU = 'false'
 
-    attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'counts on': count_on, 'discusses SU with': discuss_SU, "": ""}  # note: "": "" entry used for line break
-                  # 'communication_frequency': communication_frequency,
-                  # 'discussed_su_in_last_90_days': discussed_su_in_last_90_days}
-    #print(attributes)
+    attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'counts on': count_on,
+                  'discusses SU with': discuss_SU, "": ""}  # note: "": "" entry used for line break
 
     return attributes
 
@@ -187,22 +160,24 @@ def create_report_for_interview(path):
     """ creates and saves a PDF of alter data for a single ego """
     alter_data = pd.read_csv(path)
     attributes_list: list = process_interview_responses(alter_data)
-    BLOCK_LINE_LENGTH = len([*attributes_list[0].keys()])  # number of attributes per alter. This allows us to space alter data blocks
+    BLOCK_LINE_LENGTH = len(
+        [*attributes_list[0].keys()])  # number of attributes per alter. This allows us to space alter data blocks
     num_alters = len(attributes_list)
 
     # grab the ego UUID
-    separated_path = re.split(",|_|/", path)
-    #print(f'sep. path: {separated_path}')
+    separated_path = re.split("[,_/]", path)
+    # print(f'sep. path: {separated_path}')
     # separated_path = [a for a in separated_path if len(a) > 32]  # grab the ego UUID (will not work with folder names over 32 characters in length)
     ego_UUID = f'{separated_path[len(separated_path) - 1 - 2]}'  # any NC export will place the ego UUID in the 3rd from the end when split as above
     ego_case_ID = f'{separated_path[len(separated_path) - 1 - 3]}'
     ego_combined_ID = [ego_case_ID, ego_UUID]
-    #print(f'{ego_combined_ID}')
+    # print(f'{ego_combined_ID}')
     attribute_name_list = [*attributes_list[0].keys()]
     attribute_values_list = [[*attributes.values()] for attributes in attributes_list]
 
     # create the reportlab canvas, draw to it, and save as pdf
-    canvas = reportlab.pdfgen.canvas.Canvas(f'{ego_case_ID + "_" +  ego_UUID}_report.pdf')  # UUID at the beginning for easy searches
+    canvas = reportlab.pdfgen.canvas.Canvas(
+        f'{ego_case_ID + "_" + ego_UUID}_report.pdf')  # UUID at the beginning for easy searches
     draw_ego_id(canvas, ego_combined_ID)
     draw_all_alters(canvas, num_alters, attribute_name_list, attribute_values_list, BLOCK_LINE_LENGTH)
     canvas.showPage()
@@ -210,6 +185,6 @@ def create_report_for_interview(path):
 
 
 relevant_files = get_relevant_files(path_to_data_dir)
-#print(relevant_files)
+# print(relevant_files)
 for i in range(len(relevant_files)):
     create_report_for_interview(path_to_data_dir + relevant_files[i])
