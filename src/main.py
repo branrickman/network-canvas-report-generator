@@ -13,10 +13,12 @@ if path_to_data_dir[len(path_to_data_dir)-1] != '/':  # add a backslash to path 
 name = "NAME"
 gender = "GENDER"
 relationship = "RELATIONSHIP"
+count_on = "COUNTON"
+discuss_SU = "DISCUSSES SUBSTANCE USE"
 # communication_frequency = "COMMUNICATION_FREQUENCY"
 # discussed_su_in_last_30_days = "DISCUSSED SU IN LAST 30 DAYS"
 
-attributes = {'name': name, 'gender': gender, 'relationship': relationship, "": ""}
+attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'count on': count_on, 'discusses SU with': discuss_SU, "": ""}  # note: the "": "" entry is used for a line break later
 
               # 'communication_frequency': communication_frequency,
               # 'discussed_su_in_last_30_days': discussed_su_in_last_30_days}
@@ -88,6 +90,8 @@ def get_attributes(alters_dataframe, entry):
     name = "NAME"
     gender = "GENDER"
     relationship = "RELATIONSHIP"
+    count_on = "COUNTON"
+    discuss_SU = "DISCUSSES SUBSTANCE USE"
     communication_frequency = "COMMUNICATION_FREQUENCY"
     discussed_su_in_last_90_days = "DISCUSSED SU IN LAST 30 DAYS"
 
@@ -153,8 +157,7 @@ def get_attributes(alters_dataframe, entry):
     # if data['discuss_substance'].values[0]:
     #     discussed_su_in_last_90_days = True
 
-
-    attributes = {'name': name, 'gender': gender, 'relationship': relationship, "space": "space"}
+    attributes = {'name': name, 'gender': gender, 'relationship': relationship, 'counts on': count_on, 'discusses SU with': discuss_SU, "": ""}  # note: "": "" entry used for line break
                   # 'communication_frequency': communication_frequency,
                   # 'discussed_su_in_last_90_days': discussed_su_in_last_90_days}
     #print(attributes)
